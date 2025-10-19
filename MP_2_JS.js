@@ -24,6 +24,8 @@ class BankAccount {
   constructor(accountName) {
     this.accountName = 'Not Registered';
     this.balance = 0;
+    // PHP is the base currency
+    this.currency = 'PHP';
   }
 
   setAccountName(name){
@@ -31,6 +33,11 @@ class BankAccount {
     // TODO: add an if else for invalid names (i.e name length = 0)
     console.log(`Account name set to ${this.accountName}`)
   }
+
+  // Assuming I don't need getters in JS because the vars aren't exactly private.
+  //getBalance(){
+  //  return this.balance;
+  //}
   
   deposit(amount) {
     if (amount > 0) {
@@ -61,7 +68,7 @@ class bankingApp {
   // entry point to start app
   start() {
     while (this.isRunning) {
-      console.log("Welcome to the Banking App - Sia")
+      console.log("\nWelcome to the Banking App")
       this.displayMainMenu();
       // add the choice handling logic here
       const choice = readlineSync.question("Please choose from Options [1] -> [7]: ");
@@ -86,14 +93,14 @@ class bankingApp {
         console.log("=========================");
   }
 
-  // case should be '1' instead of 1 because the input is gotten as a string.
+  // case should be '1' instead of 1 because the input is a string.
   handleMainMenuChoice(choice){
     switch(choice) {
       case '1': 
         this.handleRegisterAccount();
         break;
       case '2':
-        //handleDeposit();
+        this.handleDeposit();
         break;
       case '3': 
         //handleWithdraw();
@@ -101,10 +108,25 @@ class bankingApp {
     }
   }
 
+  // Option [1] Register Account
   handleRegisterAccount(){
     console.log("Register Account Name");
     const name = readlineSync.question("Account Name: ");
     this.bankAccount.setAccountName(name);
+  }
+
+  // Option [2] Deposit Money
+  handleDeposit(){
+    console.log("\n--- Deposit Amount ---");
+    console.log(`Account Name: ${this.bankAccount.accountName}`);
+    console.log(`Current Balance: ${this.bankAccount.balance.toFixed(2)} Currency: ${this.bankAccount.currency}`);
+    
+    // readline input is a string
+    let strAmount = readlineSync.question("Amount to be Deposited: ");
+    const amount = parseFloat(strAmount);
+    this.bankAccount.deposit(amount);
+    console.log(`Deposited Amount [${amount}]`)
+    console.log(`New Balance is Balance: ${this.bankAccount.balance}`)
     
   }
 
