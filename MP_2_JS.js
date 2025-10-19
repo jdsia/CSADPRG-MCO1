@@ -59,8 +59,8 @@ class BankAccount {
 
 }
 
-class CurrencyExchange() {
-  constuctor() {
+class CurrencyExchange {
+  constructor() {
     this.baseCurrency = 'PHP';
     this.currencyMap = {
       '1': {code: 'PHP', name: 'Philippine Peso'},
@@ -76,6 +76,14 @@ class CurrencyExchange() {
     };
   }
   
+  displayCurrency(){
+    for (const key in this.currencyMap) {
+      const currency = this.currencyMap[key];
+      console.log(`[${key}] ${currency.name} (${currency.code})`)
+    }
+  }
+
+  
 
 }
 
@@ -83,6 +91,7 @@ class CurrencyExchange() {
 class bankingApp {
   constructor() {
     this.bankAccount = new BankAccount();
+    this.currencyExchange = new CurrencyExchange();
     this.isRunning = true;
   }
 
@@ -124,6 +133,8 @@ class bankingApp {
       case '3': 
         this.handleWithdraw();
         break;
+      case '4':
+        this.handleCurrencyExchange();
     }
   }
 
@@ -149,6 +160,7 @@ class bankingApp {
     
   }
 
+  // Option [3]
   handleWithdraw() {
     console.log("\n--- Withdraw Amount ---");
     console.log(`Account Name: ${this.bankAccount.accountName}`);
@@ -158,6 +170,12 @@ class bankingApp {
     const amount = parseFloat(strAmount);
     this.bankAccount.withdraw(amount);
     console.log(`Updated Account Balance: ${this.bankAccount.balance}`);
+  }
+
+  // Option [4] Currency Exchange
+  handleCurrencyExchange(){
+    console.log('\n --- Foreign Currency Exchange ---');
+    this.currencyExchange.displayCurrency();
   }
 
 
