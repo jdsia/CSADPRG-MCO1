@@ -83,6 +83,12 @@ class CurrencyExchange {
     }
   }
 
+  // fromCode = default PHP, toCode = index of foreign currency
+  // dont get input here. Do it form the handleCurrencyExchange function
+  exchange(amount, fromCode, toCode){
+    // prompt source currency
+  }
+
   
 
 }
