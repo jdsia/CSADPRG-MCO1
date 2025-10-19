@@ -9,20 +9,21 @@ const readlineSync = require('readline-sync');
 
 // add other classes for the banking app here
 /*
-bank acc
+bank acc [X]
 currency exchange
 interest calculator 
 */
 
 
 /*
-Register acc name -> handled by the constructor
+Register acc name -> setAccountName
 Deposit amount -> method to add amount to balance
 Withdraw amount -> method to subtract the amount from the balance.
 */
 class BankAccount {
   constructor(accountName) {
     this.accountName = 'Not Registered';
+    // TODO: Probably make this into a private method, and have to access it using Getters and Setters.
     this.balance = 0;
     // PHP is the base currency
     this.currency = 'PHP';
@@ -55,6 +56,26 @@ class BankAccount {
     }
     return false;
   }
+
+}
+
+class CurrencyExchange() {
+  constuctor() {
+    this.baseCurrency = 'PHP';
+    this.currencyMap = {
+      '1': {code: 'PHP', name: 'Philippine Peso'},
+      '2': {code: 'USD', name: 'United States Dollar'},
+      '3': {code: 'JPY', name: 'Japanese Yen'},
+      '4': {code: 'GBP', name: 'British Pound Sterling'},
+      '5': {code: 'EUR', name: 'Euro'},
+      '6': {code: 'CNY', name: 'Chinese Yuan Renminni'},
+    };
+
+    this.currencyRates = {
+      'USD': 0, 'JPY': 0, 'GBP': 0, 'EUR': 0, 'CNY': 0,
+    };
+  }
+  
 
 }
 
