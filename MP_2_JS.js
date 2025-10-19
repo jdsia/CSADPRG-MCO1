@@ -103,7 +103,7 @@ class bankingApp {
         this.handleDeposit();
         break;
       case '3': 
-        //handleWithdraw();
+        handleWithdraw();
         break;
     }
   }
@@ -128,6 +128,12 @@ class bankingApp {
     console.log(`Deposited Amount [${amount}]`)
     console.log(`New Balance is Balance: ${this.bankAccount.balance}`)
     
+  }
+
+  handleWithdraw() {
+    console.log("\n--- Withdraw Amount ---");
+    console.log(`Account Name: ${this.bankAccount.accountName}`);
+    console.log(`Current Balance: ${this.bankAccount.balance.toFixed(2)} Currency: ${this.bankAccount.currency}`);
   }
 
 }
