@@ -68,11 +68,9 @@ class bankingApp {
   // entry point to start app
   start() {
     while (this.isRunning) {
-      console.log("\nWelcome to the Banking App")
       this.displayMainMenu();
       // add the choice handling logic here
       const choice = readlineSync.question("Please choose from Options [1] -> [7]: ");
-      console.log(choice);
       if (choice < '1' || choice > '7') {
         console.log("Invalid choice. Please choose a number from 1 to 7");
         choice = readlineSync.question("Please choose from Options [1] -> [7]: ");
@@ -103,7 +101,7 @@ class bankingApp {
         this.handleDeposit();
         break;
       case '3': 
-        handleWithdraw();
+        this.handleWithdraw();
         break;
     }
   }
@@ -119,7 +117,7 @@ class bankingApp {
   handleDeposit(){
     console.log("\n--- Deposit Amount ---");
     console.log(`Account Name: ${this.bankAccount.accountName}`);
-    console.log(`Current Balance: ${this.bankAccount.balance.toFixed(2)} Currency: ${this.bankAccount.currency}`);
+    console.log(`Current Balance: ${this.bankAccount.balance.toFixed(2)} \nCurrency: ${this.bankAccount.currency}`);
     
     // readline input is a string
     let strAmount = readlineSync.question("Amount to be Deposited: ");
@@ -133,8 +131,14 @@ class bankingApp {
   handleWithdraw() {
     console.log("\n--- Withdraw Amount ---");
     console.log(`Account Name: ${this.bankAccount.accountName}`);
-    console.log(`Current Balance: ${this.bankAccount.balance.toFixed(2)} Currency: ${this.bankAccount.currency}`);
+    console.log(`Current Balance: ${this.bankAccount.balance.toFixed(2)} \nCurrency: ${this.bankAccount.currency}`);
+
+    let strAmount = readlineSync.question("Withdraw Amount: ");
+    const amount = parseFloat(strAmount);
+    this.bankAccount.withdraw(amount);
+    console.log(`Updated Account Balance: ${this.bankAccount.balance}`);
   }
+
 
 }
 
