@@ -80,13 +80,14 @@ class CurrencyExchange {
     for (const key in this.currencyMap) {
       const currency = this.currencyMap[key];
       console.log(`[${key}] ${currency.name} (${currency.code})`)
+      
     }
   }
 
   // fromCode = default PHP, toCode = index of foreign currency
   // dont get input here. Do it form the handleCurrencyExchange function
   exchange(amount, fromCode, toCode){
-    if ((fromCode !== 'PHP' && this.rates[fromCode] <= 0) || (toCode !== 'PHP' && this.rates[toCode] <= 0)) {
+    if ((fromCode !== 'PHP' && this.currencyRates[fromCode] <= 0) || (toCode !== 'PHP' && this.currencyRates[toCode] <= 0)) {
     // Inform the user that a required rate is missing.
     console.log("Error: One or both currency rates have not been recorded yet.");
     // Return null to signal that the conversion failed. The handler function will check for this.
@@ -109,6 +110,15 @@ class CurrencyExchange {
 
     return finalAmount;
 
+  }
+
+  updateRate(currencyCode, newRate) {
+    if (this.currencyRates.hasOwnProperty(currencyCode)) {
+      this.currencyRates[currencyCode] = newRate;
+      console.log(`Success: Rate for ${currencyCode} updated to ${newRate.toFixed(2)}`);
+      return true;
+    }
+    return false;
   }
 
   
@@ -164,7 +174,9 @@ class bankingApp {
       case '4':
         this.handleCurrencyExchange();
         break;
-
+      case '5':
+        this.handleRecordRate();
+        break;
       case '7':
         console.log("Program Terminated!")
         process.exit();
@@ -213,11 +225,11 @@ class bankingApp {
     const fromChoice = readlineSync.question("Source Currency: ");
     const fromCurrency = this.currencyExchange.currencyMap[fromChoice];
 
-    const amountStr = readlineSync("Source Amount: ");
+    const amountStr = readlineSync.question("Source Amount: ");
     const amount = parseFloat(amountStr);
     
 
-    this.currencyExchange.displayCurrencies()
+    this.currencyExchange.displayCurrency()
     const toChoice = readlineSync.question("Exchange Currency: ");
     const toCurrency = this.currencyExchange.currencyMap[toChoice];
 
@@ -230,6 +242,28 @@ class bankingApp {
     } else {
       console.log("Could not perform conversion. Please check the error message above.");
     }
+  }
+
+  handleRecordRate() {
+    console.log("\n--- Record Exchange Rates ---");
+    this.currencyExchange.displayCurrency();
+    const choice = readlineSync.question("Select Foreign Currency:");
+    const currency = this.currencyExchange.currencyMap[choice];
+
+    if (!currency) {
+      console.log("Error: Invalid selection. Please choose a number from the list.");
+      return;
+    }
+
+    const rateStr = readlineSync.question(`Enter the new rate for 1 ${currency.code} to PHP: `);
+    const rate = parseFloat(rateStr);
+
+    if (isNaN(rate) || rate <= 0) {
+      console.log("Error: Invalid rate. Please enter a positive number.");
+      return;
+    }
+
+    this.currencyExchange.updateRate(currency.code, rate);
   }
 
 
