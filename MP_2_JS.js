@@ -86,7 +86,29 @@ class CurrencyExchange {
   // fromCode = default PHP, toCode = index of foreign currency
   // dont get input here. Do it form the handleCurrencyExchange function
   exchange(amount, fromCode, toCode){
-    // prompt source currency
+    if ((fromCode !== 'PHP' && this.rates[fromCode] <= 0) || (toCode !== 'PHP' && this.rates[toCode] <= 0)) {
+    // Inform the user that a required rate is missing.
+    console.log("Error: One or both currency rates have not been recorded yet.");
+    // Return null to signal that the conversion failed. The handler function will check for this.
+    return null;
+    }
+    let amountInBase = 0;
+
+    if(fromCode === this.baseCurrency) {
+      amountInBase = amount;
+    } else {
+      amountInBase = amount * this.currencyRates[fromCode];
+    }
+
+    let finalAmount = 0;
+    if (toCode === this.baseCurrency) {
+      finalAmount = amountInBase;
+    } else {
+      finalAmount = amountInBase / this.currencyRates[toCode];
+    }
+
+    return finalAmount;
+
   }
 
   
@@ -141,6 +163,11 @@ class bankingApp {
         break;
       case '4':
         this.handleCurrencyExchange();
+        break;
+
+      case '7':
+        console.log("Program Terminated!")
+        process.exit();
     }
   }
 
@@ -181,7 +208,28 @@ class bankingApp {
   // Option [4] Currency Exchange
   handleCurrencyExchange(){
     console.log('\n --- Foreign Currency Exchange ---');
+    console.log("Source Currency Option:")
     this.currencyExchange.displayCurrency();
+    const fromChoice = readlineSync.question("Source Currency: ");
+    const fromCurrency = this.currencyExchange.currencyMap[fromChoice];
+
+    const amountStr = readlineSync("Source Amount: ");
+    const amount = parseFloat(amountStr);
+    
+
+    this.currencyExchange.displayCurrencies()
+    const toChoice = readlineSync.question("Exchange Currency: ");
+    const toCurrency = this.currencyExchange.currencyMap[toChoice];
+
+    // amount from to
+    const convertedAmount = this.currencyExchange.exchange(amount, fromCurrency.code, toCurrency.code);
+    
+    if (convertedAmount !== null) {
+    console.log("\n--- Exchange Result ---");
+    console.log(`${amount.toFixed(2)} ${fromCurrency.code} = ${convertedAmount.toFixed(2)} ${toCurrency.code}`);
+    } else {
+      console.log("Could not perform conversion. Please check the error message above.");
+    }
   }
 
 
