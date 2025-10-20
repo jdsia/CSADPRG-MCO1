@@ -1,5 +1,5 @@
 //********************
-//Last names: Sia
+//Last name: Sia
 //Language: Javascript
 //Paradigm(s): OOP 
 //********************
