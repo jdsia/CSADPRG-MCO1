@@ -1,6 +1,5 @@
 //********************
-//Last name: Sia
-//Language: Javascript
+//Last name: Sia (Lead), Sayat, Lim, Vanguardia Language: Javascript
 //Paradigm(s): OOP 
 //********************
 
@@ -21,7 +20,7 @@ Deposit amount -> method to add amount to balance
 Withdraw amount -> method to subtract the amount from the balance.
 */
 class BankAccount {
-  constructor(accountName) {
+  constructor() {
     this.accountName = 'Not Registered';
     // TODO: Probably make this into a private method, and have to access it using Getters and Setters.
     this.balance = 0;
@@ -39,6 +38,11 @@ class BankAccount {
   //getBalance(){
   //  return this.balance;
   //}
+
+  displayAccountInfo() {
+    console.log(`Account Name: ${this.accountName}`);
+    console.log(`Current Balance: ${this.balance.toFixed(2)} \nCurrency: ${this.currency}`);
+  }
   
   deposit(amount) {
     if (amount > 0) {
@@ -120,9 +124,31 @@ class CurrencyExchange {
     }
     return false;
   }
+}
 
-  
+class interestAmount {
+  constructor() {
+    this.annualRate = 0.05;
+  }
 
+  projectInterest(startBalance, numDays) {
+    console.log("\n--- Interest Projection ---");
+    console.log("Interest Rate: ${this.annualRate * 100}%");
+
+    console.log("\nDay | Interest | Balance");
+    console.log("----------------------------");
+
+    let currentBalance = startBalance;
+
+    for (let day = 1; day <= numDays; day++) {
+      const dailyInterest = currentBalance * (this.annualRate / 365);
+      currentBalance += dailyInterest;
+      console.log(
+        `${day.toString().padEnd(3)} | ${dailyInterest.toFixed(2).padEnd(8)} | ${currentBalance.toFixed(2)}`
+      );
+    }
+    console.log("----------------------------");
+  }
 }
 
 
@@ -130,6 +156,7 @@ class bankingApp {
   constructor() {
     this.bankAccount = new BankAccount();
     this.currencyExchange = new CurrencyExchange();
+    this.interestAmount = new interestAmount();
     this.isRunning = true;
   }
 
@@ -138,7 +165,7 @@ class bankingApp {
     while (this.isRunning) {
       this.displayMainMenu();
       // add the choice handling logic here
-      const choice = readlineSync.question("Please choose from Options [1] -> [7]: ");
+      let choice = readlineSync.question("Please choose from Options [1] -> [7]: ");
       if (choice < '1' || choice > '7') {
         console.log("Invalid choice. Please choose a number from 1 to 7");
         choice = readlineSync.question("Please choose from Options [1] -> [7]: ");
@@ -177,6 +204,9 @@ class bankingApp {
       case '5':
         this.handleRecordRate();
         break;
+      case '6':
+        this.handleInterest();
+        break;
       case '7':
         console.log("Program Terminated!")
         process.exit();
@@ -201,8 +231,7 @@ class bankingApp {
     const amount = parseFloat(strAmount);
     this.bankAccount.deposit(amount);
     console.log(`Deposited Amount [${amount}]`)
-    console.log(`New Balance is Balance: ${this.bankAccount.balance}`)
-    
+    console.log(`New Balance is Balance: ${this.bankAccount.balance.toFixed()}`)
   }
 
   // Option [3]
@@ -264,6 +293,20 @@ class bankingApp {
     }
 
     this.currencyExchange.updateRate(currency.code, rate);
+  }
+
+  handleInterest() {
+  console.log("\n--- Show Interest Computation ---");
+    this.bankAccount.displayAccountInfo();
+    const dayStr = readlineSync.question("Total Number of Days ");
+    const days = parseInt(dayStr);
+
+    if (isNaN(days) || days <= 0) {
+      console.log("Error: Invalid Number of Days, Please enter a proper number")
+      return;
+    }
+
+    this.interestAmount.projectInterest(this.bankAccount.balance, days);
   }
 
 
