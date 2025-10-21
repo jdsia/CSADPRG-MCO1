@@ -225,7 +225,7 @@ class bankingApp {
   // Option [4] Currency Exchange
   handleCurrencyExchange(){
     console.log('\n --- Foreign Currency Exchange ---');
-    console.log("Source Currency Option:")
+    console.log("\nSource Currency Option:")
     this.currencyExchange.displayCurrency();
     const fromChoice = readlineSync.question("Source Currency: ");
     const fromCurrency = this.currencyExchange.currencyMap[fromChoice];
@@ -234,6 +234,7 @@ class bankingApp {
     const amount = parseFloat(amountStr);
     
 
+    console.log("\nForeign Currency Option:")
     this.currencyExchange.displayCurrency()
     const toChoice = readlineSync.question("Exchange Currency: ");
     const toCurrency = this.currencyExchange.currencyMap[toChoice];
