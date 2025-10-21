@@ -6,38 +6,18 @@
 const readlineSync = require('readline-sync');
 
 
-// add other classes for the banking app here
-/*
-bank acc [X]
-currency exchange
-interest calculator 
-*/
-
-
-/*
-Register acc name -> setAccountName
-Deposit amount -> method to add amount to balance
-Withdraw amount -> method to subtract the amount from the balance.
-*/
 class BankAccount {
   constructor() {
     this.accountName = 'Not Registered';
-    // TODO: Probably make this into a private method, and have to access it using Getters and Setters.
     this.balance = 0;
-    // PHP is the base currency
     this.currency = 'PHP';
   }
 
   setAccountName(name){
     this.accountName = name;
-    // TODO: add an if else for invalid names (i.e name length = 0)
     console.log(`Account name set to ${this.accountName}`)
   }
 
-  // Assuming I don't need getters in JS because the vars aren't exactly private.
-  //getBalance(){
-  //  return this.balance;
-  //}
 
   displayAccountInfo() {
     console.log(`Account Name: ${this.accountName}`);
@@ -52,7 +32,6 @@ class BankAccount {
     return false;
   }
 
-  // TODO: might need to return the amount withdrawn?? 
   withdraw(amount) {
     if (amount > 0 && amount <= this.balance) {
       this.balance -= amount;
@@ -94,8 +73,6 @@ class CurrencyExchange {
     if ((fromCode !== 'PHP' && this.currencyRates[fromCode] <= 0) || (toCode !== 'PHP' && this.currencyRates[toCode] <= 0)) {
     // Inform the user that a required rate is missing.
     console.log("Error: One or both currency rates have not been recorded yet.");
-    // Return null to signal that the conversion failed. The handler function will check for this.
-    return null;
     }
     let amountInBase = 0;
 
@@ -120,9 +97,7 @@ class CurrencyExchange {
     if (this.currencyRates.hasOwnProperty(currencyCode)) {
       this.currencyRates[currencyCode] = newRate;
       console.log(`Success: Rate for ${currencyCode} updated to ${newRate.toFixed(2)}`);
-      return true;
     }
-    return false;
   }
 }
 
@@ -228,6 +203,7 @@ class bankingApp {
     
     // readline input is a string
     let strAmount = readlineSync.question("Amount to be Deposited: ");
+    // Parse String to float
     const amount = parseFloat(strAmount);
     this.bankAccount.deposit(amount);
     console.log(`Deposited Amount [${amount}]`)
@@ -262,7 +238,6 @@ class bankingApp {
     const toChoice = readlineSync.question("Exchange Currency: ");
     const toCurrency = this.currencyExchange.currencyMap[toChoice];
 
-    // amount from to
     const convertedAmount = this.currencyExchange.exchange(amount, fromCurrency.code, toCurrency.code);
     
     if (convertedAmount !== null) {
@@ -312,7 +287,5 @@ class bankingApp {
 
 }
 
-
-// 
 const app = new bankingApp();
 app.start();
